@@ -39,12 +39,12 @@ Once everything is up and running, you can access:
 
 ### Screenshots
 
-![Login](./images/Login.png)
+![Login](./screenshots/Login.png)
 
-![Auth](./images/Auth0.png)
+![Auth](./screenshots/Auth0.png)
 
-![List](./images/List.png)
+![List](./screenshots/List.png)
 
-![Add](./images/Add.png)
+![Add](./screenshots/Add.png)
 
-![Delete](./images/Delete.png)
+![Delete](./screenshots/Delete.png)
