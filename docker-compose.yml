@@ -1,0 +1,38 @@
+services:
+
+  client:
+    build: ./client
+    container_name: client
+    restart: always
+    ports:
+      - "5173:5173"
+    stdin_open: true
+    tty: true
+
+  server:
+    restart: always
+    build: ./server
+    depends_on:
+      - postgres
+    environment:
+      DATABASE_URL: postgresql://user:pass@postgres:5432/db?schema=public
+      NODE_ENV: development
+      PORT: 8080
+    ports:
+      - "8080:8080"
+    command: /bin/sh -c "npm install && npx prisma migrate deploy && npm start"
+    volumes:
+      - ./server:/app
+      - /app/node_modules
+
+  postgres:
+    image: postgres:11
+    ports:
+      - "35432:5432"
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: pass
+      POSTGRES_DB: db
+
+volumes:
+  postgres:
