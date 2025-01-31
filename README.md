@@ -1,12 +1,19 @@
 # Task manager
 
-
 ### Run Project Locally With Docker
 
 To run the entire project with Docker, from the root of the project, run the following command:
 
 ```bash
 docker-compose up --build
+``` 
+### Run Test
+
+To run tests for the client(UI) :
+
+```bash
+cd client
+yarn test
 ``` 
 
 This command will:
