@@ -1,16 +1,12 @@
 import { Request, Response } from "express";
 
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
 const createTask = async (req: Request, res: Response) => {
   try {
     const { title, description, deadline, status } = req.body;
-
-    if (!title) {
-      return res.status(400).json({ error: 'Title is required' });
-    }
 
     const newTask = await prisma.task.create({
       data: {
@@ -22,39 +18,36 @@ const createTask = async (req: Request, res: Response) => {
     });
 
     res.status(201).json(newTask);
-  } catch (e) {
-    console.error('Error creating task:', e);
-    res.status(500).json({ error: 'Failed to create task' });
-  }
-};
-
-export const getAllTasks = async (req: Request, res: Response) => {
-  try {
-
-    const allTasks = await prisma.task.findMany();
-    res.status(200).json(allTasks);
     
   } catch (e) {
-    console.error('Error retrieving tasks:', e);
-    res.status(500).json({ error: 'Failed to retrieve tasks' });
+    console.error("Error creating task:", e);
+    res.status(500).json({ error: "Failed to create task" });
   }
 };
 
+const getAllTasks = async (_req: Request, res: Response) => {
+  try {
+    const allTasks = await prisma.task.findMany();
+    res.status(200).json(allTasks);
+  } catch (e) {
+    console.error("Error retrieving tasks:", e);
+    res.status(500).json({ error: "Failed to retrieve tasks" });
+  }
+};
 const deleteTask = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
+    const taskId = Number(id);
 
-    const task = await prisma.task.findUnique({
-      where: { id: Number(id) },
-    });
-
-    if (!task) {
-      return res.status(404).json({ error: "Task not found" });
+    if (isNaN(taskId)) {
+      return res.status(400).json({ error: "Invalid task ID" });
     }
 
-    await prisma.task.delete({ where: { id: Number(id) } });
+    const deletedTask = await prisma.task.delete({
+      where: { id: taskId },
+    });
 
-    res.status(200).json({ message: "Task deleted successfully" });
+    res.status(200).json({ message: "Task deleted successfully", deletedTask });
   } catch (e) {
     console.error("Error deleting task:", e);
     res.status(500).json({ error: "Failed to delete task" });
@@ -64,5 +57,5 @@ const deleteTask = async (req: Request, res: Response) => {
 export default {
   createTask,
   getAllTasks,
-  deleteTask
+  deleteTask,
 };

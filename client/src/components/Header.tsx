@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useAuth0 } from '@auth0/auth0-react'
 import { useQueryClient } from 'react-query'
-import { FaSignOutAlt } from 'react-icons/fa'
+import { FaSignOutAlt, FaPlus } from 'react-icons/fa'
 import TaskModal from './Tasks/TaskModal'
 import API_ROUTES from '../utils/apiRoutes'
 
@@ -95,9 +95,10 @@ const Header: React.FC<HeaderProps> = ({ setSearchQuery }) => {
           <div className="flex space-x-3">
             <button
               type="button"
-              className="rounded-md border border-indigo-500 px-4 py-2 text-sm text-indigo-500 hover:scale-105 hover:shadow-md focus:ring-2 focus:ring-indigo-300"
               onClick={openModal}
+              className="flex items-center rounded-md border border-indigo-500 px-4 py-2 text-sm text-indigo-500 hover:scale-105 hover:shadow-md focus:ring-2 focus:ring-indigo-300"
             >
+              <FaPlus className="mr-2" /> {/* Add icon before the text */}
               Add Task
             </button>
             <button

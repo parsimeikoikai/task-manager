@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
-
+import { FaSave } from 'react-icons/fa'
 interface TaskModalProps {
   isOpen: boolean
   closeModal: () => void
@@ -112,6 +112,7 @@ const TaskModal: React.FC<TaskModalProps> = ({
                       id="deadline"
                       required
                       value={values.deadline}
+                      min={new Date().toISOString().split('T')[0]}
                       onChange={handleInputChange}
                       className="block w-full rounded-lg border border-gray-300 p-2.5 text-sm focus:border-blue-500 focus:ring-blue-500"
                     />
@@ -121,15 +122,17 @@ const TaskModal: React.FC<TaskModalProps> = ({
                     <button
                       type="button"
                       onClick={closeModal}
-                      className="flex items-center rounded-lg border border-gray-300 px-4 py-3 text-lg text-black"
+                      className="flex items-center rounded-md border border-gray-300 px-4 py-2 text-sm text-black hover:scale-105 hover:shadow-md focus:ring-2 focus:ring-gray-300"
                     >
                       Cancel
                     </button>
 
                     <button
                       type="submit"
-                      className="rounded-md border border-indigo-500 px-4 py-2 text-sm text-indigo-500 hover:scale-105 hover:shadow-md focus:ring-2 focus:ring-indigo-300"
+                      className="flex items-center rounded-md border border-indigo-500 px-4 py-2 text-sm text-indigo-500 hover:scale-105 hover:shadow-md focus:ring-2 focus:ring-indigo-300"
                     >
+                      <FaSave className="mr-2" />{' '}
+                      {/* Add icon before the text */}
                       Save
                     </button>
                   </div>
