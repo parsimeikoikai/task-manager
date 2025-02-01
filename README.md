@@ -1,21 +1,37 @@
 # Task manager
 
+Task Manager is a simple web application for managing tasks efficiently. It allows users to create, edit, delete, and search for tasks. The project is built using:
+
+- **Frontend:** React.js, Tailwind CSS, TypeScript  
+- **Backend:** Express.js, PostgreSQL  
+- **Authentication:** Auth0  
+
+## Getting Started
+
+Follow the steps below to set up and run the project locally.
+
+### Clone the Repository
+
+```bash
+git clone https://github.com/parsimeikoikai/task-manager.git
+cd task-manager
+```
+### Environment Variables
+Before running the project, ensure you set up the following environment variables in the .env file inside the client folder:
+
+```bash
+VITE_AUTH0_DOMAIN=
+VITE_AUTH0_CLIENT_ID=
+VITE_AUTH0_REDIRECT_URI=
+``` 
+
 ### Run Project Locally With Docker
 
-To run the entire project with Docker, from the root of the project, run the following command:
+To run the entire project with Docker, from the root of the project, execute:
 
 ```bash
 docker-compose up --build
 ``` 
-### Run Test
-
-To run tests for the client(UI) :
-
-```bash
-cd client
-yarn test
-``` 
-
 This command will:
 
 - Build the Docker images for both the client and server.
@@ -26,6 +42,16 @@ This command will:
 Once everything is up and running, you can access:
 - The client on http://localhost:5173
 - The server on http://localhost:8080
+
+
+### Run Test
+
+To run tests for the client(UI) :
+
+```bash
+cd client
+yarn test
+``` 
 
 ### Endpoints Accessible from http://localhost:8080
 

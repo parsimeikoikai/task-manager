@@ -6,10 +6,9 @@ import Logout from './Auth/Logout'
 import TodoList from './Tasks/TodoList'
 
 function App() {
-  const domain = 'dev-rgxgx08i1mi7kqfj.us.auth0.com'
-  const clientId = '42wrmxKCyo7XBWluUOtrEdkKopJeZf9O'
-  const redirectUri = 'http://localhost:5173/list'
-
+  const domain = import.meta.env.VITE_AUTH0_DOMAIN
+  const clientId = import.meta.env.VITE_AUTH0_CLIENT_ID
+  const redirectUri = import.meta.env.VITE_AUTH0_REDIRECT_URI
   const queryClient = new QueryClient()
 
   return (

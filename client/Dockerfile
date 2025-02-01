@@ -15,6 +15,8 @@ RUN pnpm install
 
 # Copy the rest of the application files
 COPY . .
+# Copy .env file into the container
+COPY .env .env
 
 # Expose the port Vite uses
 EXPOSE 5173

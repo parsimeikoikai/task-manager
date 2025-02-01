@@ -9,7 +9,7 @@ interface HeaderProps {
   setSearchQuery: React.Dispatch<React.SetStateAction<string>>
 }
 
-const Header: React.FC<HeaderProps> = ({ setSearchQuery },data) => {
+const Header: React.FC<HeaderProps> = ({ setSearchQuery }) => {
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value)
   }
@@ -24,9 +24,12 @@ const Header: React.FC<HeaderProps> = ({ setSearchQuery },data) => {
     deadline: ''
   })
 
+  const [error, setError] = useState<string | null>(null)
+
   const closeModal = () => {
     setIsOpen(false)
     setValues({ title: '', description: '', status: '', deadline: '' })
+    setError(null)
   }
 
   const openModal = () => {
@@ -37,6 +40,12 @@ const Header: React.FC<HeaderProps> = ({ setSearchQuery },data) => {
 
   const createTask = async (event: React.FormEvent) => {
     event.preventDefault()
+
+    if (!values.title || !values.description || !values.deadline) {
+      setError('Please fill in all fields.')
+      return
+    }
+
     try {
       const formattedDateTime = values.deadline + 'T12:00:00Z'
       values.deadline = formattedDateTime
@@ -46,14 +55,16 @@ const Header: React.FC<HeaderProps> = ({ setSearchQuery },data) => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(values)
       })
-      if (res.ok) {
-        await res.json()
-        queryClient.invalidateQueries('tasks')
-        closeModal()
-      } else {
-        console.error('Failed to create task')
+
+      if (!res.ok) {
+        throw new Error('Failed to create task')
       }
+
+      await res.json()
+      queryClient.invalidateQueries('tasks')
+      closeModal()
     } catch (error) {
+      setError('Error creating task. Please try again.')
       console.error('Error creating task:', error)
     }
   }
@@ -76,6 +87,7 @@ const Header: React.FC<HeaderProps> = ({ setSearchQuery },data) => {
             onChange={handleSearchChange}
             placeholder="Search task"
             className="w-full rounded border border-gray-300 px-4 py-2 focus:ring-4 focus:ring-blue-200"
+            aria-label="Search tasks"
           />
         </div>
 
@@ -92,6 +104,7 @@ const Header: React.FC<HeaderProps> = ({ setSearchQuery },data) => {
               type="button"
               className="flex items-center rounded-md border border-gray-500 px-4 py-2 text-sm text-black hover:bg-gray-100 focus:ring-2 focus:ring-gray-300"
               onClick={() => logout()}
+              aria-label="Logout"
             >
               <FaSignOutAlt className="mr-1 text-sm" />
               <span>Logout</span>
@@ -99,6 +112,12 @@ const Header: React.FC<HeaderProps> = ({ setSearchQuery },data) => {
           </div>
         </div>
       </div>
+
+      {error && (
+        <div className="mb-4 text-sm text-red-600">
+          <p>{error}</p>
+        </div>
+      )}
 
       <TaskModal
         isOpen={isOpen}
