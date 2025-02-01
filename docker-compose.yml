@@ -22,7 +22,7 @@ services:
       PORT: 8080
     ports:
       - "8080:8080"
-    command: /bin/sh -c "npm install && npx prisma migrate deploy && npm start"
+    command: /bin/sh -c "npm install && npx prisma migrate deploy && npx prisma generate && npm start"
     volumes:
       - ./server:/app
       - /app/node_modules

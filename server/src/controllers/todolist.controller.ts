@@ -1,14 +1,23 @@
 import { Request, Response } from "express";
-
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, Task, TaskStatus } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-const createTask = async (req: Request, res: Response) => {
+interface CreateTaskInput {
+  title: string;
+  description: string;
+  deadline: Date;
+  status: TaskStatus;
+}
+
+const createTask = async (
+  req: Request<{}, {}, CreateTaskInput>,
+  res: Response
+) => {
   try {
     const { title, description, deadline, status } = req.body;
 
-    const newTask = await prisma.task.create({
+    const newTask: Task = await prisma.task.create({
       data: {
         title,
         description,
@@ -18,7 +27,6 @@ const createTask = async (req: Request, res: Response) => {
     });
 
     res.status(201).json(newTask);
-    
   } catch (e) {
     console.error("Error creating task:", e);
     res.status(500).json({ error: "Failed to create task" });
@@ -27,14 +35,18 @@ const createTask = async (req: Request, res: Response) => {
 
 const getAllTasks = async (_req: Request, res: Response) => {
   try {
-    const allTasks = await prisma.task.findMany();
+    const allTasks: Task[] = await prisma.task.findMany();
     res.status(200).json(allTasks);
   } catch (e) {
     console.error("Error retrieving tasks:", e);
     res.status(500).json({ error: "Failed to retrieve tasks" });
   }
 };
-const deleteTask = async (req: Request, res: Response) => {
+
+const deleteTask = async (
+  req: Request<{ id: string }, {}, {}>,
+  res: Response
+) => {
   try {
     const { id } = req.params;
     const taskId = Number(id);
@@ -43,7 +55,15 @@ const deleteTask = async (req: Request, res: Response) => {
       return res.status(400).json({ error: "Invalid task ID" });
     }
 
-    const deletedTask = await prisma.task.delete({
+    const task = await prisma.task.findUnique({
+      where: { id: taskId },
+    });
+
+    if (!task) {
+      return res.status(404).json({ error: "Task not found" });
+    }
+
+    const deletedTask: Task = await prisma.task.delete({
       where: { id: taskId },
     });
 

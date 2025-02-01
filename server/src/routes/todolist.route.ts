@@ -3,8 +3,8 @@ import TodolistController from "../controllers/todolist.controller";
 
 const router = express.Router();
 
-router.post("/createTask", TodolistController.createTask);
-router.get("/getall", TodolistController.getAllTasks);
-router.delete("/deleteTask/:id", TodolistController.deleteTask);
+router.post("/tasks", TodolistController.createTask); 
+router.get("/tasks", TodolistController.getAllTasks);  
+router.delete("/tasks/:id", TodolistController.deleteTask); 
 
 export default router;
